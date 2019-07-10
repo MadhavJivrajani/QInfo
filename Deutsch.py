@@ -54,7 +54,7 @@ def deutsch():
     register[1] = qi.hadamard(register[1],1)   
 
     #Combining the states 
-    combined = np.kron(register[0],register[1])
+    combined = qi.tensor_combine(qi.construct_standard_basis(1))
 
 
     #Applying the quantum oracle
