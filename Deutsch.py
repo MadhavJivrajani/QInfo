@@ -21,8 +21,6 @@ from QGates import cnot, H
 import math 
 import time 
 
-I = np.array([[1,0],[0,1]])
-
 def quantumOracle():
     """
     Returns a dictionary of different quantum oracles for the following four cases:
@@ -42,7 +40,10 @@ def quantumOracle():
 
     return oracles
 
-def quantumDeutsch():
+def deutsch():
+    """
+    Implements the deutsch algorithm.
+    """
     oracle = quantumOracle()["const_1"]
 
     #initialise a quantum register with 2 qubits in states |0> and |1>
@@ -65,7 +66,7 @@ def quantumDeutsch():
 
     return result
 
-res = quantumDeutsch()
+res = deutsch()
 
 if res[0]!=0:
     print("Constant function.")
