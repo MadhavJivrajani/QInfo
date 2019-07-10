@@ -68,7 +68,7 @@ def quantumDeutsch():
 res = quantumDeutsch()
 
 if res[0]!=0:
-    print("Constant")
+    print("Constant function.")
 else:
-    print("Balanced")
+    print("Balanced function.")
 
