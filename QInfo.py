@@ -136,6 +136,9 @@ def tensor_combine(states):
     Each element of states must also be an object of type numpy.ndarray.
     Returns the combined state of qubits passed as an array to the function, which is also an object of type numpy.ndarray
     """
+    if not len(states)>=2:
+        print("Need atleast two states to combine.")
+        return
     flag = True
     if not isinstance(states, np.ndarray):
         try:
@@ -150,14 +153,17 @@ def tensor_combine(states):
             i+=1
         if flag == False:
             try:
+                i = 0
                 while i<len(states):
                     states[i] = np.array(states[i])
+                    i+=1
             except:
                 print("Invalid type: Elements must be objects of type numpy.ndarray.")
-        
         combined = np.kron(states[0],states[1])
-        for state in states[2:]:
-            combined = np.kron(combined, state)
+        if len(states)>2:
+            for state in states[2:]:
+                combined = np.kron(combined, state)
+            return combined
         return combined
     
 def measure_standard(psi):
@@ -368,4 +374,50 @@ def cNOT(combined):
         except:
             print("Invalid type: Argument passed must be an object of type numpy.ndarray.")
 
+def cZ(combined):
+    """
+    Application of a controlled Z.
+    combined must be object of type numpy.ndarray.
+    combined is the combined state of the controlling and controlled qubit states. 
+    combined = controlling ⊗ controlled.
+    """
+    if isinstance(combined, np.ndarray):
+        try:
+            return np.dot(cz, combined)
+        except Exception as e:
+            raise e
 
+    else:
+        try:
+            combined = np.array(combined)
+            try:
+                return np.dot(cz, combined)
+            except Exception as e:
+                raise e
+
+        except:
+            print("Invalid type: Argument passed must be an object of type numpy.ndarray.")
+
+def ccNOT(combined):
+    """
+    Application of a double controlled not.
+    combined must be object of type numpy.ndarray.
+    combined is the combined state of the controlling and controlled qubit states. 
+    combined = controlling ⊗ controlled.
+    """
+    if isinstance(combined, np.ndarray):
+        try:
+            return np.dot(ccnot, combined)
+        except Exception as e:
+            raise e
+
+    else:
+        try:
+            combined = np.array(combined)
+            try:
+                return np.dot(ccnot, combined)
+            except Exception as e:
+                raise e
+
+        except:
+            print("Invalid type: Argument passed must be an object of type numpy.ndarray.")
