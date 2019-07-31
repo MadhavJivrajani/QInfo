@@ -81,8 +81,8 @@ class Grover:
         print()
         print("Oracle: \n")
         print(self.oracle())
-        for i in self.states[1:]:
+        for state in self.states[1:]:
             print()
-            print(i)
+            print(state)
             print()
 
