@@ -17,8 +17,7 @@ class Grover:
         target :     signifies the element being searched for, for which the amplitude must be amplified. 
         reg    :     signifies a quantum register holding n qubits in the |0> state.
         vec    :     signifies the combined state of all qubits. 
-        states :     represents a list storing the state of the combined qubit state at various stages
-                     of the algorithm.
+        states :     represents a list storing the combined qubit state at various stages of the algorithm.
         """
         self.n = n
         self.target = target
