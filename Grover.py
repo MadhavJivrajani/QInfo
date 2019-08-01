@@ -45,7 +45,7 @@ class Grover:
         return invertMatrix
 
     def groverIteration(self):
-        """Returns the maximum grover's iterations. Quadratic speedup.""""
+        """Returns the maximum grover's iterations. Quadratic speedup."""
         return (np.pi/4)*math.sqrt(2**self.n)
     
     def grover(self):
@@ -62,7 +62,7 @@ class Grover:
             self.states.append(self.vec)
     
     def plotAlgo(self):
-        """Plots bar graphs for probablity amplitudes at various stages of the algorithm.""""
+        """Plots bar graphs for probablity amplitudes at various stages of the algorithm."""
         plot_total = len(self.states)
         _, ax = plt.subplots(nrows = plot_total, ncols = 1)
         i = 0
@@ -76,13 +76,12 @@ class Grover:
         plt.show()
 
     def printAlgo(self):
-        """Prints the states and oracles at different stages of the algorithm.""""
+        """Prints the states and oracles at different stages of the algorithm."""
         print(self.states[0])
         print()
         print("Oracle: \n")
         print(self.oracle())
-        for state in self.states[1:]:
+        for i in self.states[1:]:
             print()
-            print(state)
+            print(i)
             print()
-
