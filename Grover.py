@@ -17,7 +17,8 @@ class Grover:
         target :     signifies the element being searched for, for which the amplitude must be amplified. 
         reg    :     signifies a quantum register holding n qubits in the |0> state.
         vec    :     signifies the combined state of all qubits. 
-        states :     represents a list storing the combined qubit state at various stages of the algorithm.
+        states :     represents a list storing the state of the combined qubit state at various stages
+                     of the algorithm.
         """
         self.n = n
         self.target = target
@@ -69,8 +70,9 @@ class Grover:
             curr_plot = np.array([k[0] for k in self.states[i]])
             index = np.arange(len(curr_plot))
             row.bar(index, curr_plot)
+            row.set_xticks(list(range(2**self.n)))
             row.set_xlabel("States")
-            row.set_ylabel("Probabilities")
+            row.set_ylabel("Amplitudes")
             i+=1
         plt.show()
 
@@ -80,7 +82,8 @@ class Grover:
         print()
         print("Oracle: \n")
         print(self.oracle())
-        for i in self.states[1:]:
+        for state in self.states[1:]:
             print()
-            print(i)
+            print(state)
             print()
+
