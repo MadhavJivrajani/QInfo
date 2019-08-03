@@ -139,33 +139,13 @@ def tensor_combine(states):
     if not len(states)>=2:
         print("Need atleast two states to combine.")
         return
-    flag = True
-    if not isinstance(states, np.ndarray):
-        try:
-            states = np.array(states)
-        except:
-            print("Invalid type: Argument passed must be an object of type numpy.ndarray.")
-    else:
-        i = 0
-        while i<len(states) and flag:
-            if not isinstance(states[i], np.ndarray):
-                flag = False
-            i+=1
-        if flag == False:
-            try:
-                i = 0
-                while i<len(states):
-                    states[i] = np.array(states[i])
-                    i+=1
-            except:
-                print("Invalid type: Elements must be objects of type numpy.ndarray.")
-        combined = np.kron(states[0],states[1])
-        if len(states)>2:
-            for state in states[2:]:
-                combined = np.kron(combined, state)
-            return combined
+    combined = np.kron(states[0],states[1])
+    if len(states)>2:
+        for state in states[2:]:
+            combined = np.kron(combined, state)
         return combined
-    
+    return combined
+
 def measure_standard(psi):
     """
     Measures a qubit in the standard basis. 
@@ -421,3 +401,31 @@ def ccNOT(combined):
 
         except:
             print("Invalid type: Argument passed must be an object of type numpy.ndarray.")
+
+def combineGates(gates):
+    """
+    Combines gates in the same step of a quantum circuit. 
+    If not gate is present, identity matrix of dimension n x n to be passed,
+    where n is the number of qubits in that wire.
+    """
+    if not len(gates)>=2:
+        print("Need atleast two gates to combine.")
+        return
+    combined = np.kron(gates[0],gates[1])
+    if len(gates)>2:
+        for gate in gates[2:]:
+            combined = np.kron(combined, gate)
+        return combined
+    return combined
+
+def applyGate(state, gate):
+    """
+    Applies gate to state.
+    Both gate and state must be objects of type numpy.ndarray
+    Returns an object of type numpy.ndarray representing the combined state. 
+    """
+    if not isinstance(state, np.ndarray):
+        state = np.array(state)
+    if not isinstance(gate, np.ndarray):
+        gate = np.array(gate)
+    return np.dot(gate, state)
