@@ -50,12 +50,16 @@ reg[1].pauliX()
 reg[0].hadamard()
 reg[1].hadamard()
 
-reg[0].cNOT(reg[1])
+#oracle
+reg[1].cNOT(reg[0])
 
 reg[0].hadamard()
 reg[1].hadamard()
 
+#Measurement
 reg[0].measureNum(1)
+
+#print out probabilities in basis states.
 print(reg[0].measureRes)
 
 

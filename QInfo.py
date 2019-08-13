@@ -8,8 +8,6 @@ __author__ = "Madhav Jivrajani"
 import numpy as np 
 import math
 from QGates import *
-from mapping import mapping_2 as m2
-from mapping import mapping_2_rev as m2_rev
 
 class Qubit:
     def __init__(self, n):
@@ -268,14 +266,14 @@ class Qubit:
     def cNOT(self, this):
         """
         Application of a controlled not.
-        self is controlling qubit 
-        this is controlled qubit.
+        self is target qubit 
+        this is controlling qubit.
         """
         if not isinstance(self.state, np.ndarray):
             self.state = np.array(self.state)
         if not isinstance(this.state, np.ndarray):
             this.state = np.array(this.state)
-        combined = np.kron(self.state, this.state)
+        combined = np.kron(this.state, self.state)
         combined = np.dot(np.dot(cnot, self.densityMatrix(combined)),self.to_bra(cnot))
         combined_tensor = combined.reshape([2,2,2,2])
 
@@ -285,15 +283,15 @@ class Qubit:
 
     def cZ(self, this):
         """
-        Application of a controlled Z.
-        self is controlling qubit 
-        this is controlled qubit.
+        Application of a controlled Pauli Z
+        self is target qubit
+        this is controlling qubit.
         """
         if not isinstance(self.state, np.ndarray):
             self.state = np.array(self.state)
         if not isinstance(this.state, np.ndarray):
             this.state = np.array(this.state)
-        combined = np.kron(self.state, this.state)
+        combined = np.kron(this.state, self.state)
         combined = np.dot(np.dot(cz, self.densityMatrix(combined)),self.to_bra(cz))
         combined_tensor = combined.reshape([2,2,2,2])
 
@@ -302,10 +300,8 @@ class Qubit:
 
     def ccNOT(self, this, that):
         """
-        Application of a double controlled not.
-        combined must be object of type numpy.ndarray.
-        combined is the combined state of the controlling and controlled qubit states. 
-        combined = controlling ⊗ controlled.
+        self is target qubit.
+        this, that are controlling qubits.
         """
         if not isinstance(self.state, np.ndarray):
             self.state = np.array(self.state)
@@ -313,7 +309,7 @@ class Qubit:
             this.state = np.array(this.state)
         if not isinstance(that.state, np.ndarray):
             that.state = np.array(that.state)
-        combined = np.kron(np.kron(self.state, this.state), that.state)
+        combined = np.kron(np.kron(that.state, this.state), self.state)
         combined = np.dot(np.dot(ccnot, self.densityMatrix(combined)),self.to_bra(ccnot))
 
         self.state = combined
