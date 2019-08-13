@@ -16,10 +16,13 @@ Using quantum we need just one.
 __author__ = "Madhav Jivrajani"
 
 import numpy as np 
-import QInfo as qi 
-from QGates import cnot, H
+from QInfo import Register 
+# from mapping import mapping_2 as m2
+from QGates import *
 import math 
 import time 
+
+I = np.array([[1,0],[0,1]])
 
 def quantumOracle():
     """
@@ -40,36 +43,19 @@ def quantumOracle():
 
     return oracles
 
-def deutsch():
-    """
-    Implements the deutsch algorithm.
-    """
-    oracle = quantumOracle()["const_1"]
+reg = Register(2).initialize()
 
-    #initialise a quantum register with 2 qubits in states |0> and |1>
-    register = [qi.construct_standard_basis(1)[i] for i in range(0,2)] # The state now is |00> 
+reg[1].pauliX()
 
-    #Creating superposition by applying hadamard transform to both qubits. 
-    register[0] = qi.hadamard(register[0],1)
-    register[1] = qi.hadamard(register[1],1)   
+reg[0].hadamard()
+reg[1].hadamard()
 
-    #Combining the states 
-    combined = qi.tensor_combine(qi.construct_standard_basis(1))
+reg[0].cNOT(reg[1])
 
+reg[0].hadamard()
+reg[1].hadamard()
 
-    #Applying the quantum oracle
-    post_oracle = np.dot(oracle, combined)
+reg[0].measureNum(1)
+print(reg[0].measureRes)
 
-
-    #calculating the final state
-    result = np.dot(np.kron(H,np.eye(2)),post_oracle)
-
-    return result
-
-res = deutsch()
-
-if res[0]!=0:
-    print("Constant function.")
-else:
-    print("Balanced function.")
 
