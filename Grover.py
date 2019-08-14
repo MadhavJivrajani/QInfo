@@ -92,6 +92,3 @@ class Grover:
             print(state)
             print()
 
-algo = Grover(4,2)
-algo.grover()
-algo.printAlgo()
