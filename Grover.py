@@ -4,8 +4,8 @@ An implementation of Grover's Algorithm written using the QInfo Python Library.
 
 __author__ = "Madhav Jivrajani"
 
-import QInfo as qi 
-import QGates as gates 
+from QInfo import Register
+from QGates import H
 import numpy as np 
 import math 
 import matplotlib.pyplot as plt 
@@ -22,8 +22,8 @@ class Grover:
         """
         self.n = n
         self.target = target
-        self.reg = np.array([qi.construct_standard_basis(1)[0] for i in range(self.n)])
-        self.vec = qi.tensor_combine(self.reg)
+        self.reg = Register(self.n).initialize()
+        self.vec = self.reg[0].tensor_combine(self.reg[1:])
         self.states = []
     
     def oracle(self):
@@ -50,7 +50,12 @@ class Grover:
     
     def grover(self):
         """Implements the grover's diffusion operator and the grover's algorithm."""
-        self.vec = qi.hadamard(self.vec, self.n)
+        H_temp = 1
+        if self.n == 1:
+            H_temp = H
+        for _ in range(self.n):
+            H_temp = np.kron(H_temp, H)
+        self.vec = np.dot(H_temp, self.vec)
         self.states.append(self.vec)
         self.iter = int(np.trunc(self.groverIteration()))
         for _ in range(1,self.iter):
@@ -87,3 +92,6 @@ class Grover:
             print(state)
             print()
 
+algo = Grover(4,2)
+algo.grover()
+algo.printAlgo()

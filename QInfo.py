@@ -146,13 +146,13 @@ class Qubit:
         Each element of states must also be an object of type numpy.ndarray.
         Returns the combined state of qubits passed as an array to the function, which is also an object of type numpy.ndarray
         """
-        if not len(states)>=2:
+        if not len(states)>=1:
             print("Need atleast two states to combine.")
             return
-        combined = np.kron(states[0],states[1])
-        if len(states)>2:
-            for state in states[2:]:
-                combined = np.kron(combined, state)
+        combined = np.kron(self.state,states[0].state)
+        if len(states)>1:
+            for state in states[1:]:
+                combined = np.kron(combined, state.state)
             return combined
         return combined
 
