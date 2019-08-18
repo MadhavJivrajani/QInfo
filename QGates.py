@@ -13,7 +13,10 @@ H = (1/np.sqrt(2))*np.array([[1,1],[1,-1]])
 S = np.array([[1,0],[0,-1j]])
 
 """π/8 Gate T"""
-T_pi = np.array([[1,0],[0,math.e**(((math.pi)/4)*-1j)]])
+T_pi = np.array([[1,0],[0,math.e**((math.pi/4)*1j)]])
+
+"""T dagger"""
+T_dag = np.array([[1,0],[0,math.e**((math.pi/4)*-1j)]])
 
 """Controlled NOT, CNOT"""
 cnot = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
@@ -35,3 +38,9 @@ cswap = np.array([[1,0,0,0,0,0,0,0],[0,1,0,0,0,0,0,0],[0,0,1,0,0,0,0,0],[0,0,0,1
 
 """Controlled Pauli Z"""
 cz = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,-1]])
+
+"""Square root of NOT"""
+sqrt_not = np.array([[(1+1j)/2 , (1-1j)/2],[(1-1j)/2 , (1+1j)/2]])
+
+"""P"""
+p = np.array([[1,0],[0,1j]])

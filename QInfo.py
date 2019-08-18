@@ -13,41 +13,42 @@ class Qubit:
     def __init__(self, n):
         """Initializes a qubit in the |0> state"""
         self.n = n
-        self.state = self.construct_standard_basis(1)[0]
+        self.state_dirac = self.construct_standard_basis(1)[0]
+        self.state = self.densityMatrix(self.construct_standard_basis(1)[0])
         self.measureRes = {}
 
     def initQubit(self):
         """Initializes qubit to |0> state"""
         return self.state
 
-    def to_bra(self, ket):
+    def to_bra(self):
         """
         Converts a ket to the corresponding bra.
         ket should be an object of type numpy.ndarray
         returns the bra which is also a numpy array.
         """
-        if isinstance(ket, np.ndarray):
-            return (ket.conjugate()).transpose()
+        if isinstance(self.state, np.ndarray):
+            return (self.state.conjugate()).transpose()
         else:
             try:
-                ket = np.array(ket)
-                self.state = (ket.conjugate()).transpose()
+                self.state = np.array(self.state)
+                self.state = (self.state.conjugate()).transpose()
             except:
                 print("Invalid type: Argument passed must be an object of type numpy.ndarray.")
 
 
-    def to_ket(self, bra):
+    def to_ket(self):
         """
         Converts a bra to the corresponding ket.
         bra should be aan object of type numpy.ndarray
         returns the ket which is also an object of type numpy.ndarray.
         """
-        if isinstance(bra, np.ndarray):
-                self.state = (bra.conjugate()).transpose()
+        if isinstance(self.state, np.ndarray):
+                self.state = (self.state.conjugate()).transpose()
         else:
             try:
-                bra = np.array(bra)
-                self.state = (bra.conjugate()).transpose()
+                self.state = np.array(self.state)
+                self.state = (self.state.conjugate()).transpose()
             except:
                 print("Invalid type: Argument passed must be an object of type numpy.ndarray.")
 
@@ -146,13 +147,13 @@ class Qubit:
         Each element of states must also be an object of type numpy.ndarray.
         Returns the combined state of qubits passed as an array to the function, which is also an object of type numpy.ndarray
         """
-        if not len(states)>=1:
+        if not len(states)>=2:
             print("Need atleast two states to combine.")
             return
-        combined = np.kron(self.state,states[0].state)
-        if len(states)>1:
-            for state in states[1:]:
-                combined = np.kron(combined, state.state)
+        combined = np.kron(states[0],states[1])
+        if len(states)>2:
+            for state in states[2:]:
+                combined = np.kron(combined, state)
             return combined
         return combined
 
@@ -203,9 +204,9 @@ class Qubit:
         if not isinstance(self.state, np.ndarray):
             print("Invalid type: state must be object of type numpy.ndarray.")
             return
-        self.state = self.densityMatrix(self.state)
+        # self.state = self.densityMatrix(self.state)
                 
-        self.state = np.dot(np.dot(H, self.state),self.to_bra(H))
+        self.state = np.dot(np.dot(H, self.state),H.conjugate().transpose())
 
 
     def pauliX(self):
@@ -215,9 +216,9 @@ class Qubit:
         if not isinstance(self.state, np.ndarray):
             print("Invalid type: state must be object of type numpy.ndarray.")
             return
-        self.state = self.densityMatrix(self.state)
+        # self.state = self.densityMatrix(self.state)
                 
-        self.state = np.dot(np.dot(X, self.state),self.to_bra(X)) 
+        self.state = np.dot(np.dot(X, self.state), X.conjugate().transpose()) 
 
     def pauliY(self):
         """
@@ -226,9 +227,9 @@ class Qubit:
         if not isinstance(self.state, np.ndarray):
             print("Invalid type: state must be object of type numpy.ndarray.")
             return
-        self.state = self.densityMatrix(self.state)
+        # self.state = self.densityMatrix(self.state)
                 
-        self.state = np.dot(np.dot(Y, self.state),self.to_bra(Y))
+        self.state = np.dot(np.dot(Y, self.state), Y.conjugate().transpose())
 
     def pauliZ(self):
         """
@@ -237,9 +238,9 @@ class Qubit:
         if not isinstance(self.state, np.ndarray):
             print("Invalid type: state must be object of type numpy.ndarray.")
             return
-        self.state = self.densityMatrix(self.state)
+        # self.state = self.densityMatrix(self.state)
                 
-        self.state = np.dot(np.dot(Z, self.state),self.to_bra(Z)) 
+        self.state = np.dot(np.dot(Z, self.state), Z.conjugate().transpose()) 
 
     def phase(self):
         """
@@ -248,9 +249,9 @@ class Qubit:
         if not isinstance(self.state, np.ndarray):
             print("Invalid type: state must be object of type numpy.ndarray.")
             return
-        self.state = self.densityMatrix(self.state)
+        # self.state = self.densityMatrix(self.state)
                 
-        self.state = np.dot(np.dot(S, self.state),self.to_bra(S)) 
+        self.state = np.dot(np.dot(S, self.state), S.conjugate().transpose()) 
 
     def T(self):
         """
@@ -259,9 +260,29 @@ class Qubit:
         if not isinstance(self.state, np.ndarray):
             print("Invalid type: state must be object of type numpy.ndarray.")
             return
-        self.state = self.densityMatrix(self.state)
+        # self.state = self.densityMatrix(self.state)
                 
-        self.state = np.dot(np.dot(T_pi, self.state),self.to_bra(T_pi))   
+        self.state = np.dot(np.dot(T_pi, self.state), T_pi.conjugate().transpose()) 
+
+    def P(self):
+        """
+        Application 1 qubit p.
+        """
+        if not isinstance(self.state, np.ndarray):
+            print("Invalid type: state must be object of type numpy.ndarray.")
+            return
+        # self.state = self.densityMatrix(self.state)
+                
+        self.state = np.dot(np.dot(p, self.state), p.conjugate().transpose()) 
+    def T_dagger(self):
+        """
+        Application 1 qubit π/8 or T gate.
+        """
+        if not isinstance(self.state, np.ndarray):
+            print("Invalid type: state must be object of type numpy.ndarray.")
+            return
+        # self.state = self.densityMatrix(self.state)                
+        self.state = np.dot(np.dot(T_dag, self.state), T_dag.conjugate().transpose())
 
     def cNOT(self, this):
         """
@@ -274,7 +295,7 @@ class Qubit:
         if not isinstance(this.state, np.ndarray):
             this.state = np.array(this.state)
         combined = np.kron(this.state, self.state)
-        combined = np.dot(np.dot(cnot, self.densityMatrix(combined)),self.to_bra(cnot))
+        combined = np.dot(np.dot(cnot, combined), cnot.conjugate().transpose())
         combined_tensor = combined.reshape([2,2,2,2])
 
         self.state = np.trace(combined_tensor, axis1=1, axis2=3)
@@ -292,11 +313,12 @@ class Qubit:
         if not isinstance(this.state, np.ndarray):
             this.state = np.array(this.state)
         combined = np.kron(this.state, self.state)
-        combined = np.dot(np.dot(cz, self.densityMatrix(combined)),self.to_bra(cz))
+        combined = np.dot(np.dot(cz, combined), cz.conjugate().transpose())
         combined_tensor = combined.reshape([2,2,2,2])
 
         self.state = np.trace(combined_tensor, axis1=1, axis2=3)
         this.state = np.trace(combined_tensor, axis1=0, axis2=2)
+        
 
     def ccNOT(self, this, that):
         """
@@ -309,12 +331,27 @@ class Qubit:
             this.state = np.array(this.state)
         if not isinstance(that.state, np.ndarray):
             that.state = np.array(that.state)
-        combined = np.kron(np.kron(that.state, this.state), self.state)
-        combined = np.dot(np.dot(ccnot, self.densityMatrix(combined)),self.to_bra(ccnot))
 
-        self.state = combined
-        this.state = combined
-        that.state = combined
+        temp1 = that.state
+        temp2 = this.state
+        self.hadamard()
+        self.cNOT(that)
+        self.T_dagger()
+        self.cNOT(this)
+        self.T()
+        self.cNOT(that)
+        self.T_dagger()
+        self.cNOT(this)
+        that.T_dagger()
+        self.T()
+        that.cNOT(this)
+        self.hadamard()
+        this.T()
+        that.T_dagger()
+        that.cNOT(this)
+        self.hadamard()
+        this.state = temp2
+        that.state = temp1
 
     def measureNum(self, n):
         """
@@ -322,8 +359,6 @@ class Qubit:
         """
         for i in range(2**n):
             self.measureRes[str(i)] = self.measureDensity(self.state, self.construct_standard_basis(n)[i])['state']
-
-
 
     def combineGates(self, gates):
         """
@@ -360,7 +395,7 @@ class Qubit:
         if not isinstance(psi, np.ndarray):
             psi = np.array(psi)
         else:
-            psi_bra = self.to_bra(psi)
+            psi_bra = psi.conjugate().transpose()
         return np.dot(psi, psi_bra)
 
     def measureDensity(self, psi, state):
@@ -371,9 +406,9 @@ class Qubit:
             psi = np.array(psi)
         if not isinstance(state, np.ndarray):
             state = np.array(state)
-        state_bra = self.to_bra(state)
-        rho = self.densityMatrix(psi)
-        return {"state" : np.trace(np.dot(np.dot(state_bra, rho), state))}
+        state_bra = state.conjugate().transpose()
+        rho = psi
+        return {"state" : np.abs(np.trace(np.dot(np.dot(state_bra, rho), state)))}
 
 class Register:
     def __init__(self, n):
